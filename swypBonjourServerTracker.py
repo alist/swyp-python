@@ -22,10 +22,9 @@ class swypBonjourServerTracker():
 					  callBack = self.browse_callback)
 
 	def update(self):
-		ready = select.select([self.browse_sdRef], [], [])
+		ready = select.select([self.browse_sdRef], [], [],0)
 		if self.browse_sdRef in ready[0]:
 			pybonjour.DNSServiceProcessResult(self.browse_sdRef)
-
 	def stop(self):
 		self.browse_sdRef.close()
 	
@@ -58,10 +57,10 @@ class swypBonjourServerTracker():
 
 	    if not (flags & pybonjour.kDNSServiceFlagsAdd):
 		for delegate in self._serverTrackerDelegates:
-			delegate.bonjourServerTrackerRemovedServer(serviceName)
+			delegate.bonjourServerTrackerRemovedServer(''.join([serviceName,'.',replyDomain]).replace(' ','-'))
 		return
 
-#	    print 'Service added; resolving'
+#	    print 'Service found named: ', serviceName , 'in: ',replyDomain, '; resolving')
 
 	    resolve_sdRef = pybonjour.DNSServiceResolve(0,
 							interfaceIndex,
