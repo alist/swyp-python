@@ -45,7 +45,10 @@ class swypInteractionManager():
 	
 	def makeSwypServerConnection(self, serverInfoTuple):
 		newSession	=	swypConnectionSession.swypConnectionSession(serverInfoTuple)
-		self.activeConnections.append(newSession)
+		if newSession.connectionError is None:
+			self.activeConnections.append(newSession)
+		else:
+			print ('abandoning server connection')
 	
 	def stop(self):
 		for connectionSession in self.activeConnections:

@@ -7,9 +7,12 @@ class swypConnectionSession():
 	clientHelloHeader	=	'74;{\n \"tag\" : \"clientHello\",\n \"type\" : \"swyp/ControlPacket\",\n \"length\" : 139}'	
 	clientHelloPayload	=	'{\n \"supportedFileTypes\" : [\"image/png\"],\n \"sessionHue\" : \"0.990000,0.440000,0.690000,0.720000",\n \"intervalSinceSwypIn\" : 1.308031022548676}'
 	
+		
 	def __init__(self, remoteServerTuple):
+		self.connectionError	=	None
 		self._sessionDelegates 	= []
 		self._remoteServer 	= remoteServerTuple
+		self.serverConnection	= None
 		self.start()
 
 	def start(self):	
@@ -21,6 +24,7 @@ class swypConnectionSession():
 			serverSocket.connect((address,port))
 		except socket.error, msg:
 			print ('Connection error: ', socket.error, msg)
+			self.connectionError	=	socket.error
 		else:
 			self.serverConnection = serverSocket
 			self.sendClientHelloPacket()
