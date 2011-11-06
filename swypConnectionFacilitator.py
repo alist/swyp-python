@@ -1,4 +1,4 @@
-import os, sys, shutil
+import os, sys, shutil, time
 import swypBonjourServerTracker
 import swypConnectionSession
 
@@ -60,6 +60,7 @@ class swypInteractionManager():
 			try:
 				while True:
 					self.updateServices()	
+					time.sleep(.02)
 			except KeyboardInterrupt:
 				pass
 		finally:

@@ -57,7 +57,7 @@ class swypBonjourServerTracker():
 
 	    if not (flags & pybonjour.kDNSServiceFlagsAdd):
 		for delegate in self._serverTrackerDelegates:
-			delegate.bonjourServerTrackerRemovedServer(''.join([serviceName,'.',replyDomain]).replace(' ','-'))
+			delegate.bonjourServerTrackerRemovedServer(''.join([serviceName.replace('.',''),'.',replyDomain]).replace(' ','-'))
 		return
 
 #	    print 'Service found named: ', serviceName , 'in: ',replyDomain, '; resolving')

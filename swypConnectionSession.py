@@ -13,6 +13,7 @@ class swypConnectionSession():
 		self._sessionDelegates 	= []
 		self._remoteServer 	= remoteServerTuple
 		self.serverConnection	= None
+		socket.setdefaulttimeout(2)
 		self.start()
 
 	def start(self):	
@@ -33,15 +34,26 @@ class swypConnectionSession():
 		self.updateSocket()	
 
 	def updateSocket(self):
-		data = self.serverConnection.recv(1024)
-  	 	if data:
-			print ('Data!: ', repr(data)) 
-		
+		if self.serverConnection is None:
+			return	
+		ready = select.select([self.serverConnection], [], [],0)
+                while self.serverConnection in ready[0]: 
+			print 'ready to recv data!'
+			data = self.serverConnection.recv(1024)
+  	 		if data:
+				print 'Data!: "',repr(data),'"'
+			else:
+				self.serverConnection.close() 
+				self.serverConnection = None
+				return
+			ready = select.select([self.serverConnection], [], [],0)
+			
 	def sendClientHelloPacket(self):
 		self.serverConnection.send(''.join([swypConnectionSession.clientHelloHeader,swypConnectionSession.clientHelloPayload]))
 
 	def stop(self):
-		self.serverConnection.close()
+		if self.serverConnection is not None:
+			self.serverConnection.close()
 	
 	def addSessionDelegate(self, delegate):
 		self._sessionDelegates.append(delegate)
