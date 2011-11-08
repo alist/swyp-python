@@ -1,6 +1,7 @@
 import os, sys, shutil
 import select
 import socket
+import swypInputDataDiscerner
 
 class swypConnectionSession():
 	
@@ -14,6 +15,8 @@ class swypConnectionSession():
 		self._remoteServer 	= remoteServerTuple
 		self.serverConnection	= None
 		socket.setdefaulttimeout(2)
+		self.inputDiscerner	= swypInputDataDiscerner.swypInputDataDiscerner()
+		self.inputDiscerner.addDataDelegate(self)
 		self.start()
 
 	def start(self):	
@@ -42,6 +45,7 @@ class swypConnectionSession():
 			data = self.serverConnection.recv(1024)
   	 		if data:
 				print 'Data!: "',repr(data),'"'
+				self.inputDiscerner.feedInputData(data)
 			else:
 				self.serverConnection.close() 
 				self.serverConnection = None
@@ -58,6 +62,12 @@ class swypConnectionSession():
 	def addSessionDelegate(self, delegate):
 		self._sessionDelegates.append(delegate)
 	
+	#delegation from discerner
+	def swypSessionPackageCompleted(self, completedPackage):
+		print 'recieved package of type!: ', completedPackage.fileType
+		if completedPackage.fileType == "image/png":
+			print 'recieved image!!'	
+
 	#observer pattern
 	
 	#callbacks
