@@ -44,7 +44,7 @@ class swypConnectionSession():
 			print 'ready to recv data!'
 			data = self.serverConnection.recv(1024)
   	 		if data:
-				print 'Data!: "',repr(data),'"'
+#				print 'Data!: "',repr(data),'"'
 				self.inputDiscerner.feedInputData(data)
 			else:
 				self.serverConnection.close() 
@@ -66,7 +66,11 @@ class swypConnectionSession():
 	def swypSessionPackageCompleted(self, completedPackage):
 		print 'recieved package of type!: ', completedPackage.fileType
 		if completedPackage.fileType == "image/png":
-			print 'recieved image!!'	
+			imageLocation	= './received/image.png'
+			print 'wrote out image!! to ', imageLocation
+			imageFile	= open(imageLocation, 'w')
+			completedPackage.payloadData.tofile(imageFile)
+			imageFile.close()
 
 	#observer pattern
 	
