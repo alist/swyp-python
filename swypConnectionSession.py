@@ -5,8 +5,8 @@ import swypInputDataDiscerner
 
 class swypConnectionSession():
 	
-	clientHelloHeader	=	'74;{\n \"tag\" : \"clientHello\",\n \"type\" : \"swyp/ControlPacket\",\n \"length\" : 139}'	
-	clientHelloPayload	=	'{\n \"supportedFileTypes\" : [\"image/png\"],\n \"sessionHue\" : \"0.990000,0.440000,0.690000,0.720000",\n \"intervalSinceSwypIn\" : 1.308031022548676}'
+	clientHelloHeader	=	'74;{\n \"tag\" : \"clientHello\",\n \"type\" : \"swyp/ControlPacket\",\n \"length\" : 140}'	
+	clientHelloPayload	=	'{\n \"supportedFileTypes\" : [\"image/jpeg\"],\n \"sessionHue\" : \"0.990000,0.440000,0.690000,0.720000",\n \"intervalSinceSwypIn\" : 1.308031022548676}'
 	
 		
 	def __init__(self, remoteServerTuple):
@@ -71,6 +71,13 @@ class swypConnectionSession():
 			imageFile	= open(imageLocation, 'w')
 			completedPackage.payloadData.tofile(imageFile)
 			imageFile.close()
+		if completedPackage.fileType == "image/jpeg":
+			imageLocation	= './received/image.jpeg'
+			print 'wrote out image!! to ', imageLocation
+			imageFile	= open(imageLocation, 'w')
+			completedPackage.payloadData.tofile(imageFile)
+			imageFile.close()
+
 
 	#observer pattern
 	

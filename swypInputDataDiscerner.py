@@ -45,6 +45,7 @@ class swypInputDataDiscerner():
 			self.inputData[0:semicolon+1]	= array.array('c')
 			headerString	= ''.join(self.inputData[0:headerLength])
 			self.inputData[0:headerLength]   = array.array('c')
+			print headerString
 			header		= json.loads(headerString)
 			if header is not None:
 				tag	= header['tag']
